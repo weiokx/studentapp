@@ -10,11 +10,55 @@
     tools:context="com.tbkt.student.MainActivity" >
 
     <TextView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/r_bg"
-        android:width="191px"
-        android:height="191px"
+        android:background="@drawable/login_logo"
+        android:layout_centerHorizontal="true"
          />
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/logo"
+        android:textSize="28sp"
+        android:text="欢迎使用同步课堂"
+         />
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/welcome"
+        android:maxLength="20"
+        android:hint="请输入登录账号"
+        android:background="#ffffff"
+        android:inputType="textUri|textMultiLine"
+        />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/username"
+        android:maxLength="20"
+        android:hint="请输入密码"
+        android:background="#ffffff"
+        android:password="true" 
+        />
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/loginbutton_box"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password"
+        >
+        <Button
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+            android:text="登录" 
+            />
+    </LinearLayout>
 
 </RelativeLayout>
