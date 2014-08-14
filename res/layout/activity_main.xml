@@ -83,27 +83,42 @@
 	        >
 	        <Button
 	            android:layout_width="fill_parent"
-	        	android:layout_height="40dp"
+	        	android:layout_height="45dp"
 	        	android:background="@drawable/btn_reg"
 	        	android:layout_weight="4"
 	            android:text="免费注册" 
 	            />
 	        <Button
 	            android:layout_width="fill_parent"
-	        	android:layout_height="40dp"
+	        	android:layout_height="45dp"
 	        	android:background="@drawable/btn_login"
 	        	android:layout_weight="3"
 	            android:text="登录" 
 	            android:layout_marginLeft="10dp"
 	            />
 	    </LinearLayout>
+	    
+	    <TextView android:layout_width="wrap_content"
+	        	android:layout_height="wrap_content"
+	        	android:id="@+id/forget_password"
+	        	android:text="忘记密码？"
+	        	android:autoLink="web"
+	        	android:layout_below="@id/loginbutton_box"
+	        	android:layout_alignRight="@id/loginbutton_box"
+	        	android:layout_marginTop="10dp"
+	        	android:textColor="#FFD144"
+	        	android:textColorLink="#FFD144"
+		        android:textColorHighlight="#FFD144"
+	        />
+	    
 	    <LinearLayout
+	        android:id="@+id/tbkt_link_box"
 	        android:orientation="horizontal"
 	        android:gravity="center_horizontal"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/loginbutton_box"
-	        android:layout_marginTop="15dp"
+	        android:layout_marginTop="40dp"
 	        >
 	        <TextView
 		        android:layout_width="wrap_content"
@@ -112,7 +127,21 @@
 		        android:textColor="#49C1B8" 
 		        android:text="教师用户请到网站开通"
 		         />
+	        <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="20dp"
+		        android:layout_gravity="center_vertical"
+		        android:id="@+id/tbkt_link"
+		        android:textColor="#FFD144" 
+		        android:text="www.tbkt.cn"
+		        android:autoLink="web"
+		        android:textColorLink="#FFD144"
+		        android:textColorHighlight="#FFD144"
+		         />
 	    </LinearLayout>
+	    
+	    
+	    
     </RelativeLayout>
     
     <LinearLayout
@@ -133,15 +162,6 @@
 			android:contentDescription="电话图标"
 			tools:ignore="ContentDescription"
 	        />
-        <!-- 
-        <ImageView 
-	        android:layout_height="20dp"
-	        android:layout_width="20dp"
-	        android:scaleType="fitCenter"
-	        android:src="@drawable/icon_password"
-			tools:ignore="ContentDescription"
-	        />
-	     -->
 	     <TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="20dp"
@@ -153,7 +173,12 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="20dp"
 	        android:layout_gravity="center_vertical"
+	        android:id="@+id/phone_link"
 	        android:text="12556158"
+	        android:textStyle="italic"
+	        android:autoLink="phone"
+	        android:textColorLink="#333"
+		    android:textColorHighlight="#333"
 	         />
     </LinearLayout>
 

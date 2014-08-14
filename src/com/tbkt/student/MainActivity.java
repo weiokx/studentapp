@@ -4,10 +4,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.style.URLSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 	EditText username = null;
@@ -24,8 +27,19 @@ public class MainActivity extends ActionBarActivity {
 		int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED); 
 		int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED); 
 		username.measure(w, h); 
-		System.out.println(username.getMeasuredHeight());
 		
+		// Remove underlines from HTML links
+	    TextView tbkt_link = (TextView)findViewById(R.id.tbkt_link);
+	    // Make sure the TextView was instantiated correctly
+	    if(tbkt_link != null) {
+	        removeUnderlines((Spannable)tbkt_link.getText());
+	    }
+	    // Remove underlines from HTML links
+	    TextView phone_link = (TextView)findViewById(R.id.phone_link);
+	    // Make sure the TextView was instantiated correctly
+	    if(phone_link != null) {
+	    	removeUnderlines((Spannable)phone_link.getText());
+	    }
 	}
 
 	@Override
@@ -46,4 +60,17 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public static Spannable removeUnderlines(Spannable p_Text) {  
+        URLSpan[] spans = p_Text.getSpans(0, p_Text.length(), URLSpan.class);  
+        for (URLSpan span : spans) {  
+             int start = p_Text.getSpanStart(span);  
+             int end = p_Text.getSpanEnd(span);  
+             p_Text.removeSpan(span);  
+             span = new URLSpanNoUnderline(span.getURL());  
+             p_Text.setSpan(span, start, end, 0);  
+        }  
+        return p_Text;  
+   }  
+	
 }
