@@ -9,8 +9,10 @@ import android.text.style.URLSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	EditText username = null;
@@ -61,7 +63,17 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public void clickLogin(View source){
+		// 单击登录事件
+		//Button btn_login = (Button)findViewById(R.id.btn_login);
+		EditText username = (EditText)findViewById(R.id.username);
+		EditText passowrd = (EditText)findViewById(R.id.password);
+		Toast toast = Toast.makeText(getApplicationContext(), "请输入账号或密码", Toast.LENGTH_LONG);
+		toast.show();
+	}
+	
 	public static Spannable removeUnderlines(Spannable p_Text) {  
+		// 移除下划线
         URLSpan[] spans = p_Text.getSpans(0, p_Text.length(), URLSpan.class);  
         for (URLSpan span : spans) {  
              int start = p_Text.getSpanStart(span);  

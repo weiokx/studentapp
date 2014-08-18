@@ -107,17 +107,19 @@
 	        <Button
 	            android:layout_width="fill_parent"
 	        	android:layout_height="45dp"
-	        	android:background="@drawable/btn_reg"
+	        	android:background="@drawable/btn_reg_icon"
 	        	android:layout_weight="4"
 	            android:text="免费注册" 
 	            />
 	        <Button
 	            android:layout_width="fill_parent"
 	        	android:layout_height="45dp"
-	        	android:background="@drawable/btn_login"
+	        	android:background="@drawable/btn_login_icon"
 	        	android:layout_weight="3"
 	            android:text="登录" 
 	            android:layout_marginLeft="10dp"
+	            android:id="@+id/btn_login"
+	            android:onClick="clickLogin"
 	            />
 	    </LinearLayout>
 	    
