@@ -28,3 +28,4 @@ proguard/
 .project
 .pydevproject
 .classpath
+project.properties

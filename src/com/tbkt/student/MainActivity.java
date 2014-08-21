@@ -1,21 +1,44 @@
 package com.tbkt.student;
 
+import org.json.JSONObject;
+
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.style.URLSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	EditText username = null;
+	
+	Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            if(msg.what == 0x123) {
+            	try{
+            		JSONObject jsonRes = new JSONObject(msg.obj.toString());
+            		if(jsonRes.getBoolean("success")) {
+            			Toast toast = Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG);
+            			toast.show();
+            		} else {
+            			Toast toast = Toast.makeText(getApplicationContext(), "’À∫≈ªÚ√‹¬Î¥ÌŒÛ", Toast.LENGTH_LONG);
+            			toast.show();
+            		}
+            	} catch(Exception e){
+            		e.printStackTrace();
+            	}
+            }
+        }
+    };
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,8 +91,17 @@ public class MainActivity extends ActionBarActivity {
 		//Button btn_login = (Button)findViewById(R.id.btn_login);
 		EditText username = (EditText)findViewById(R.id.username);
 		EditText passowrd = (EditText)findViewById(R.id.password);
-		Toast toast = Toast.makeText(getApplicationContext(), "«Î ‰»Î’À∫≈ªÚ√‹¬Î", Toast.LENGTH_LONG);
-		toast.show();
+		String str_username = username.getText().toString().trim();
+		String str_password = passowrd.getText().toString().trim();
+		if(str_username.equals("") || str_password.equals("")) {
+			Toast toast = Toast.makeText(getApplicationContext(), "«Î ‰»Î’À∫≈ªÚ√‹¬Î", Toast.LENGTH_LONG);
+			toast.show();
+		} else {
+			String url = "http://studentapi.tbkt.cn/account/auth/";
+			String params = String.format("username=%s&password=%s", str_username, str_password);
+			System.out.println(params);
+			new Thread(new HttpJsonUtil("POST", url, params, handler, 0x123)).start();
+		}
 	}
 	
 	public static Spannable removeUnderlines(Spannable p_Text) {  
