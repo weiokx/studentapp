@@ -27,7 +27,7 @@ class HttpJsonUtil implements Runnable{
         this.url = url;  
         this.params = params;  
         this.handler = handler;  
-        
+        this.what = what;
     }  
   
     @Override  
@@ -43,7 +43,7 @@ class HttpJsonUtil implements Runnable{
 	        }  
 	        if(method.equals("POST")){  
 	            //Log.i("iiiiiii","∑¢ÀÕPOST«Î«Û");  
-	        	m.obj = GetPostUtil.sendGet(url, params);  
+	        	m.obj = GetPostUtil.sendPost(url, params);  
 	        	//String resp = GetPostUtil.sendPost(url, params);
 	        	//JSONObject jsonRes = new JSONObject(resp);
 	            //m.obj = jsonRes;

@@ -22,7 +22,7 @@ public class MainActivity extends ActionBarActivity {
 	
 	Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            if(msg.what == 0x123) {
+            if(msg.what == 100) {
             	try{
             		JSONObject jsonRes = new JSONObject(msg.obj.toString());
             		if(jsonRes.getBoolean("success")) {
@@ -100,7 +100,7 @@ public class MainActivity extends ActionBarActivity {
 			String url = "http://studentapi.tbkt.cn/account/auth/";
 			String params = String.format("username=%s&password=%s", str_username, str_password);
 			System.out.println(params);
-			new Thread(new HttpJsonUtil("POST", url, params, handler, 0x123)).start();
+			new Thread(new HttpJsonUtil("POST", url, params, handler, 100)).start();
 		}
 	}
 	
