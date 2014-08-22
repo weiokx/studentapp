@@ -1,5 +1,10 @@
 package com.tbkt.student;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.os.Handler;
@@ -17,11 +22,11 @@ import android.util.Log;
 class HttpJsonUtil implements Runnable{  
     private String method;  
     private String url;  
-    private String params;  
+    private JSONObject params;  
     private Handler handler;
     private int what;
       
-    public HttpJsonUtil(String method, String url, String params, Handler handler, int what) {  
+    public HttpJsonUtil(String method, String url, JSONObject params, Handler handler, int what) {  
         super();  
         this.method = method; 
         this.url = url;  
@@ -36,15 +41,19 @@ class HttpJsonUtil implements Runnable{
 	        Message m = new Message();  
 	        m.what = what;  
 	        if(method.equals("GET")){  
+	        	
 	            Log.i("iiiiiii","发送GET请求");  
-	            m.obj = GetPostUtil.sendGet(url, params);  
+	            //m.obj = GetPostUtil.sendGet(url, params);  
 	            //JSONObject jsonRes = new JSONObject(result);  // 解析sjon格式数据
 	            //JSONObject jsonData = jsonRes.getJSONObject("data");
 	        }  
 	        if(method.equals("POST")){  
-	            //Log.i("iiiiiii","发送POST请求");  
-	        	m.obj = GetPostUtil.sendPost(url, params);  
-	        	//String resp = GetPostUtil.sendPost(url, params);
+	        	HttpPost request = new HttpPost(url); 
+	        	StringEntity se = new StringEntity(params.toString());   
+	        	request.setEntity(se); 
+	        	HttpResponse httpResponse = new DefaultHttpClient().execute(request); 
+	        	String resp = EntityUtils.toString(httpResponse.getEntity());
+	        	m.obj = resp;
 	        	//JSONObject jsonRes = new JSONObject(resp);
 	            //m.obj = jsonRes;
 	        }  

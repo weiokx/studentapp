@@ -29,8 +29,10 @@ public class MainActivity extends ActionBarActivity {
             			Toast toast = Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG);
             			toast.show();
             		} else {
-            			String error = jsonRes.getString("errors");
-            			Toast toast = Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG);
+            			System.out.println("fail ");
+            			String errors = jsonRes.getString("errors");
+            			System.out.println(errors);
+            			Toast toast = Toast.makeText(getApplicationContext(), errors, Toast.LENGTH_LONG);
             			toast.show();
             		}
             	} catch(Exception e){
@@ -99,9 +101,15 @@ public class MainActivity extends ActionBarActivity {
 			toast.show();
 		} else {
 			String url = "http://studentapi.tbkt.cn/account/auth/";
-			String params = String.format("username=%s&password=%s", str_username, str_password);
-			System.out.println(params);
-			new Thread(new HttpJsonUtil("POST", url, params, handler, 100)).start();
+			//String params = String.format("username=%s&password=%s", str_username, str_password);
+			try{
+				JSONObject params = new JSONObject();  
+				params.put("username", str_username);  
+				params.put("password", str_password);
+				new Thread(new HttpJsonUtil("POST", url, params, handler, 100)).start();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 	
