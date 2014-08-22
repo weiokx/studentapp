@@ -29,7 +29,8 @@ public class MainActivity extends ActionBarActivity {
             			Toast toast = Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG);
             			toast.show();
             		} else {
-            			Toast toast = Toast.makeText(getApplicationContext(), "’À∫≈ªÚ√‹¬Î¥ÌŒÛ", Toast.LENGTH_LONG);
+            			String error = jsonRes.getString("errors");
+            			Toast toast = Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG);
             			toast.show();
             		}
             	} catch(Exception e){
