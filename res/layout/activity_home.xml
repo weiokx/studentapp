@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity" >
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/loginbutton_box"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        >
+        <Button
+            android:layout_width="fill_parent"
+        	android:layout_height="45dp"
+            android:text="英语" 
+            />
+        <Button
+            android:layout_width="fill_parent"
+        	android:layout_height="45dp"
+            android:text="数学" 
+            android:onClick="clickLogin"
+            />
+    </LinearLayout>
+
+</RelativeLayout>
