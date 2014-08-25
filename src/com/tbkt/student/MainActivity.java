@@ -1,7 +1,11 @@
 package com.tbkt.student;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
@@ -17,9 +21,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tbkt.student.util.DialogUtil;
+import com.tbkt.student.util.HttpUtil;
+
 public class MainActivity extends ActionBarActivity {
-	EditText username = null;
-	
+	// 定义界面中两个文本框
+	EditText etUsername, etPassword;
 	Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             if(msg.what == 100) {
@@ -50,11 +57,12 @@ public class MainActivity extends ActionBarActivity {
 		Drawable drawable = getResources().getDrawable(R.drawable.icon_username);
 		drawable.setBounds(0, 0, (int)(drawable.getIntrinsicWidth()*0.5), (int)(drawable.getIntrinsicHeight()*0.5));
 		ScaleDrawable sd = new ScaleDrawable(drawable, 0, 100, 100);
-		username = (EditText)findViewById(R.id.username);
-		username.setCompoundDrawables(sd.getDrawable(), null, null, null);
+		etUsername = (EditText)findViewById(R.id.username);
+		etPassword = (EditText)findViewById(R.id.password);
+		etUsername.setCompoundDrawables(sd.getDrawable(), null, null, null);
 		int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED); 
 		int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED); 
-		username.measure(w, h); 
+		etUsername.measure(w, h); 
 		
 		// Remove underlines from HTML links
 	    TextView tbkt_link = (TextView)findViewById(R.id.tbkt_link);
@@ -91,26 +99,66 @@ public class MainActivity extends ActionBarActivity {
 	
 	public void clickLogin(View source){
 		// 单击登录事件
-		//Button btn_login = (Button)findViewById(R.id.btn_login);
-		EditText username = (EditText)findViewById(R.id.username);
-		EditText passowrd = (EditText)findViewById(R.id.password);
-		String str_username = username.getText().toString().trim();
-		String str_password = passowrd.getText().toString().trim();
-		if(str_username.equals("") || str_password.equals("")) {
-			Toast toast = Toast.makeText(getApplicationContext(), "请输入账号或密码", Toast.LENGTH_LONG);
-			toast.show();
-		} else {
-			String url = "http://studentapi.tbkt.cn/account/auth/";
-			//String params = String.format("username=%s&password=%s", str_username, str_password);
-			try{
-				JSONObject params = new JSONObject();  
-				params.put("username", str_username);  
-				params.put("password", str_password);
-				new Thread(new HttpJsonUtil("POST", url, params, handler, 100)).start();
-			}catch(Exception e){
-				e.printStackTrace();
+		// 执行输入校验
+		if (validate()) {
+			// 如果登录成功
+			if (loginPro()) {
+				// 启动Main Activity
+				Intent intent = new Intent(MainActivity.this, AuctionClientActivity.class);
+				startActivity(intent);
+				// 结束该Activity
+				finish();
+			}
+			else {
+				DialogUtil.showDialog(MainActivity.this, "用户名称或者密码错误，请重新输入！", false);
 			}
 		}
+	}
+	
+	// 对用户输入的用户名、密码进行校验
+	private boolean validate() {
+		String username = etUsername.getText().toString().trim();
+		if (username.equals("")) {
+			DialogUtil.showDialog(this, "用户账户不能为空！", false);
+			return false;
+		}
+		String pwd = etPassword.getText().toString().trim();
+		if (pwd.equals("")) {
+			DialogUtil.showDialog(this, "用户密码不能为空！", false);
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean loginPro() {
+		// 获取用户输入的用户名、密码
+		String str_username = etUsername.getText().toString();
+		String pwd = etPassword.getText().toString();
+		JSONObject jsonObj;
+		try {
+			jsonObj = query(str_username, pwd);
+			// 如果userId 大于0
+			if (jsonObj.getBoolean("success")) {
+				return true;
+			}
+		} catch (Exception e) {
+			DialogUtil.showDialog(this, "服务器响应异常，请稍后再试！", false);
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	// 定义发送请求的方法
+	private JSONObject query(String username, String password) throws Exception {
+		// 使用Map封装请求参数
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("username", username);
+		map.put("pasword", password);
+		// 定义发送请求的URL
+		String url = HttpUtil.BASE_URL + "/account/auth/";
+		// 发送请求
+		return new JSONObject(HttpUtil.postRequest(url, map));
 	}
 	
 	public static Spannable removeUnderlines(Spannable p_Text) {  
