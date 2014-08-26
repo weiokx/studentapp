@@ -24,6 +24,8 @@ public class HomeActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		TextView tv_sessionid = (TextView)findViewById(R.id.ssssionid);
+		tv_sessionid.setText("sessionid");
 	}
 
 	@Override

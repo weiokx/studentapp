@@ -22,30 +22,9 @@ import android.widget.Toast;
 import com.tbkt.student.util.HttpUtil;
 
 public class MainActivity extends ActionBarActivity {
-	SQLiteDatabase db;
+	MyDatabaseHelper dbHelper;
 	// 定义界面中两个文本框
 	EditText etUsername, etPassword;
-	Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            if(msg.what == 100) {
-            	try{
-            		JSONObject jsonRes = new JSONObject(msg.obj.toString());
-            		if(jsonRes.getBoolean("success")) {
-            			Toast toast = Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG);
-            			toast.show();
-            		} else {
-            			System.out.println("fail ");
-            			String errors = jsonRes.getString("errors");
-            			System.out.println(errors);
-            			Toast toast = Toast.makeText(getApplicationContext(), errors, Toast.LENGTH_LONG);
-            			toast.show();
-            		}
-            	} catch(Exception e){
-            		e.printStackTrace();
-            	}
-            }
-        }
-    };
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,8 +119,10 @@ public class MainActivity extends ActionBarActivity {
 			jsonRes = new JSONObject(HttpUtil.postRequest(url, params));
 			if (jsonRes.getBoolean("success")) {
 				String sessionid = jsonRes.getString("sessionid");
-				db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir().toString()+ "/my.db3", null); // 打开或创建数据库
-				
+				//db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir().toString()+ "/my.db3", null); // 打开或创建数据库
+				dbHelper = new MyDatabaseHelper(this, "tbkt.db3", 1);
+				SQLiteDatabase db = dbHelper.getReadableDatabase();
+				db.execSQL("insert into user values(null , ? , ?)", new String[] {"sessionid", sessionid});
 				return true;
 			} else {
 				Toast.makeText(getApplicationContext(), jsonRes.getString("errors"), Toast.LENGTH_LONG).show();
@@ -172,8 +153,8 @@ public class MainActivity extends ActionBarActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		// 退出程序时关闭SQLiteDatabase
-		if (db != null && db.isOpen()) {
-			db.close();
+		if (dbHelper != null) {
+			dbHelper.close();
 		}
 	}
 	
