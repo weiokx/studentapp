@@ -1,11 +1,9 @@
 package com.tbkt.student;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
@@ -21,10 +19,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tbkt.student.util.DialogUtil;
 import com.tbkt.student.util.HttpUtil;
 
 public class MainActivity extends ActionBarActivity {
+	SQLiteDatabase db;
 	// 定义界面中两个文本框
 	EditText etUsername, etPassword;
 	Handler handler = new Handler() {
@@ -104,14 +102,11 @@ public class MainActivity extends ActionBarActivity {
 			// 如果登录成功
 			if (loginPro()) {
 				// 启动Main Activity
-				Intent intent = new Intent(MainActivity.this, AuctionClientActivity.class);
+				Intent intent = new Intent(MainActivity.this, HomeActivity.class);
 				startActivity(intent);
 				// 结束该Activity
 				finish();
-			}
-			else {
-				DialogUtil.showDialog(MainActivity.this, "用户名称或者密码错误，请重新输入！", false);
-			}
+			} 
 		}
 	}
 	
@@ -119,12 +114,12 @@ public class MainActivity extends ActionBarActivity {
 	private boolean validate() {
 		String username = etUsername.getText().toString().trim();
 		if (username.equals("")) {
-			DialogUtil.showDialog(this, "用户账户不能为空！", false);
+			Toast.makeText(getApplicationContext(), "用户账户不能为空！", Toast.LENGTH_LONG).show();
 			return false;
 		}
 		String pwd = etPassword.getText().toString().trim();
 		if (pwd.equals("")) {
-			DialogUtil.showDialog(this, "用户密码不能为空！", false);
+			Toast.makeText(getApplicationContext(), "用户密码不能为空！", Toast.LENGTH_LONG).show();
 			return false;
 		}
 		return true;
@@ -133,32 +128,31 @@ public class MainActivity extends ActionBarActivity {
 	private boolean loginPro() {
 		// 获取用户输入的用户名、密码
 		String str_username = etUsername.getText().toString();
-		String pwd = etPassword.getText().toString();
-		JSONObject jsonObj;
+		String str_password = etPassword.getText().toString();
+		JSONObject jsonRes;
 		try {
-			jsonObj = query(str_username, pwd);
-			// 如果userId 大于0
-			if (jsonObj.getBoolean("success")) {
+			JSONObject params = new JSONObject();  
+			params.put("username", str_username);  
+			params.put("password", str_password);
+			// 定义发送请求的URL
+			String url = HttpUtil.BASE_URL + "/account/auth/";
+			// 发送请求
+			jsonRes = new JSONObject(HttpUtil.postRequest(url, params));
+			if (jsonRes.getBoolean("success")) {
+				String sessionid = jsonRes.getString("sessionid");
+				db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir().toString()+ "/my.db3", null); // 打开或创建数据库
+				
 				return true;
+			} else {
+				Toast.makeText(getApplicationContext(), jsonRes.getString("errors"), Toast.LENGTH_LONG).show();
 			}
 		} catch (Exception e) {
-			DialogUtil.showDialog(this, "服务器响应异常，请稍后再试！", false);
+			Toast.makeText(getApplicationContext(), "服务器响应异常，请稍后再试！", Toast.LENGTH_LONG).show();
+			System.out.println(e);
 			e.printStackTrace();
 		}
 
 		return false;
-	}
-	
-	// 定义发送请求的方法
-	private JSONObject query(String username, String password) throws Exception {
-		// 使用Map封装请求参数
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("username", username);
-		map.put("pasword", password);
-		// 定义发送请求的URL
-		String url = HttpUtil.BASE_URL + "/account/auth/";
-		// 发送请求
-		return new JSONObject(HttpUtil.postRequest(url, map));
 	}
 	
 	public static Spannable removeUnderlines(Spannable p_Text) {  
@@ -173,5 +167,14 @@ public class MainActivity extends ActionBarActivity {
         }  
         return p_Text;  
    }  
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// 退出程序时关闭SQLiteDatabase
+		if (db != null && db.isOpen()) {
+			db.close();
+		}
+	}
 	
 }
