@@ -2,6 +2,8 @@ package com.tbkt.student;
 
 import org.json.JSONObject;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends ActionBarActivity {
+	MyDatabaseHelper dbHelper;
 	EditText username = null;
 	
 	@Override
@@ -25,7 +28,21 @@ public class HomeActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		TextView tv_sessionid = (TextView)findViewById(R.id.ssssionid);
-		tv_sessionid.setText("sessionid");
+		
+		try{
+			dbHelper = new MyDatabaseHelper(this, "tbkt.db3", 1);
+			SQLiteDatabase db = dbHelper.getReadableDatabase();
+			Cursor cursor = db.rawQuery("select * from user where name='sessionid'", null);
+			while(cursor.moveToNext()){ 
+				int nameColumnIndex = cursor.getColumnIndex("value");
+				String sessionid = cursor.getString(nameColumnIndex); 
+				tv_sessionid.setText(sessionid);
+			}
+				
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
 	}
 
 	@Override

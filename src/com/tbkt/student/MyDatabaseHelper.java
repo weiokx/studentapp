@@ -24,7 +24,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	}
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// 初次使用数据库时, 如果数据库不存在，则调用onCreate方法，并自动建表
+		// 初次使用数据库时, 如果数据库不存在，则自动创建，并调用onCreate方法，创建项目所需表（可以一次性把项目中需要的表全创建了）
 		db.execSQL(CREATE_TABLE_SQL);
 	}
 	@Override

@@ -3,12 +3,11 @@ package com.tbkt.student;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.style.URLSpan;
@@ -118,11 +117,17 @@ public class MainActivity extends ActionBarActivity {
 			// 发送请求
 			jsonRes = new JSONObject(HttpUtil.postRequest(url, params));
 			if (jsonRes.getBoolean("success")) {
-				String sessionid = jsonRes.getString("sessionid");
+				JSONObject jData = jsonRes.getJSONObject("data");
+				String sessionid = jData.getString("sessionid");
 				//db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir().toString()+ "/my.db3", null); // 打开或创建数据库
 				dbHelper = new MyDatabaseHelper(this, "tbkt.db3", 1);
 				SQLiteDatabase db = dbHelper.getReadableDatabase();
-				db.execSQL("insert into user values(null , ? , ?)", new String[] {"sessionid", sessionid});
+				Cursor cursor = db.rawQuery("select * from user where name=\"sessionid\"", null);
+				if(cursor.moveToFirst() == true) { // 存在记录则更新数据
+					db.execSQL("update user set value=? where name=\"sessionid\"", new String[] {sessionid});
+				} else { // 添加一条数据
+					db.execSQL("insert into user values(null , ? , ?)", new String[] {"sessionid", sessionid});
+				}
 				return true;
 			} else {
 				Toast.makeText(getApplicationContext(), jsonRes.getString("errors"), Toast.LENGTH_LONG).show();
