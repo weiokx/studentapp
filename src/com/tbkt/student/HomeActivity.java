@@ -2,6 +2,7 @@ package com.tbkt.student;
 
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
@@ -28,12 +29,20 @@ public class HomeActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		TextView tv_sessionid = (TextView)findViewById(R.id.ssssionid);
+		final ActionBar bar = getActionBar();
+		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_TITLE); // 设置标题栏不显示标题
 		
 		try{
 			dbHelper = new MyDatabaseHelper(this, "tbkt.db3", 1);
 			SQLiteDatabase db = dbHelper.getReadableDatabase();
 			Cursor cursor = db.rawQuery("select * from user where name='sessionid'", null);
-			while(cursor.moveToNext()){ 
+//			while(cursor.moveToNext()){ 
+//				int nameColumnIndex = cursor.getColumnIndex("value");
+//				String sessionid = cursor.getString(nameColumnIndex); 
+//				tv_sessionid.setText(sessionid);
+//			}
+			if(cursor.getCount() >= 1) {
+				cursor.moveToFirst();
 				int nameColumnIndex = cursor.getColumnIndex("value");
 				String sessionid = cursor.getString(nameColumnIndex); 
 				tv_sessionid.setText(sessionid);
@@ -45,12 +54,12 @@ public class HomeActivity extends ActionBarActivity {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.main, menu);
+//		return true;
+//	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
