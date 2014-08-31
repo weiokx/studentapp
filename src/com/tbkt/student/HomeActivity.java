@@ -30,7 +30,7 @@ public class HomeActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_home);
 		TextView tv_sessionid = (TextView)findViewById(R.id.ssssionid);
 		final ActionBar bar = getActionBar();
-		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_TITLE); // 设置标题栏不显示标题
+		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_TITLE); // 设置标题栏不显示HOME图标与标题
 		
 		try{
 			dbHelper = new MyDatabaseHelper(this, "tbkt.db3", 1);
