@@ -16,6 +16,7 @@ import android.text.style.URLSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +24,19 @@ import android.widget.Toast;
 public class HomeActivity extends ActionBarActivity {
 	MyDatabaseHelper dbHelper;
 	EditText username = null;
+	private View mCustomView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		TextView tv_sessionid = (TextView)findViewById(R.id.ssssionid);
+		mCustomView = getLayoutInflater().inflate(R.layout.activity_home_bar_custom, null);
 		final ActionBar bar = getActionBar();
+		bar.setCustomView(mCustomView,
+                new ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_TITLE); // 设置标题栏不显示HOME图标与标题
-		
+		bar.setDisplayOptions(1, ActionBar.DISPLAY_SHOW_CUSTOM);
 		try{
 			dbHelper = new MyDatabaseHelper(this, "tbkt.db3", 1);
 			SQLiteDatabase db = dbHelper.getReadableDatabase();
