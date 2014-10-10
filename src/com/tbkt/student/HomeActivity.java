@@ -35,9 +35,8 @@ public class HomeActivity extends ActionBarActivity {
 		//mCustomView = getLayoutInflater().inflate(R.layout.activity_home_bar_custom, null);
 		final ActionBar bar = getActionBar();
 		bar.setCustomView(R.layout.activity_home_bar_custom2);
-		
-		bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM  
-		        | ActionBar.DISPLAY_SHOW_HOME); 
+		//bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME); 
+		bar.hide();
 		//bar.setCustomView(mCustomView);
 		//bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_TITLE); // 设置标题栏不显示HOME图标与标题
 		
